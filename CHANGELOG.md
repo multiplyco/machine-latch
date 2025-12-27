@@ -1,0 +1,15 @@
+# Changelog
+
+## 0.1.8 - 2026-01-02
+
+Initial release.
+
+- `machine-latch-factory` - create a factory for latches from a machine spec
+- `transition!` - atomically attempt a state transition
+- `get-state` - get current state keyword
+- `at-or-past?` - non-blocking state check
+- `await` - block until target state reached
+- `await-millis` - await with millisecond timeout
+- `await-dur` - await with Duration timeout
+- `throw-on-platform-park!` - configure platform thread protection
+- `*assert-virtual*` - platform thread protection dynamic var
