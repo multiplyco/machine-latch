@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.12 - 2026-01-07
+
+- Bump `scoped` to 0.1.14
+
 ## 0.1.10 - 2026-01-03
 
 - Bump `scoped` to 0.1.13
