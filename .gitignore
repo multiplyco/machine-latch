@@ -1,6 +1,7 @@
 *.class
 *.iml
 *.jar
+.clj-kondo
 .cpcache/
 .idea/
 .lein-deps-sum
@@ -8,9 +9,11 @@
 .lein-plugins/
 .lein-repl-history
 .nrepl-port
+/.shadow-cljs/
 /checkouts/
 /classes/
 /lib/
+/node_modules/
 /target/
 pom.xml
 pom.xml.asc

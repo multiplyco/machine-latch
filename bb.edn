@@ -1,32 +1,40 @@
 {:tasks
- {dev {:doc "Start nREPL server"
-       :task (shell "clj -M:dev -m nrepl.cmdline --interactive")}
+ {dev          {:doc  "Start nREPL server"
+                :task (shell "clj -M:dev -m nrepl.cmdline --interactive")}
 
-  test {:doc "Run tests"
-        :task (shell "clj -M:test -m kaocha.runner")}
+  test         {:doc     "Run all tests (CLJ + CLJS)"
+                :depends [test:clj test:cljs]}
 
-  build {:doc "Build library JAR"
-         :task (shell "clj -T:build jar")}
+  test:clj     {:doc  "Run Clojure tests"
+                :task (shell (str "clj -M:test -m kaocha.runner " *command-line-args*))}
 
-  install {:doc "Install JAR to local Maven repo"
-           :task (shell "clj -T:build install")}
+  test:cljs    {:doc  "Run ClojureScript tests"
+                :task (do
+                        (shell "bunx shadow-cljs compile ci")
+                        (shell "bunx karma start --single-run"))}
 
-  tag {:doc "Create and push version tag"
-       :task (shell "clj -T:build tag")}
+  build        {:doc  "Build library JAR"
+                :task (shell "clj -T:build jar")}
 
-  deploy {:doc "Tag, push, and deploy to Clojars"
-          :task (do (shell "clj -T:build tag")
-                    (shell "clj -T:build deploy"))}
+  install      {:doc  "Install JAR to local Maven repo"
+                :task (shell "clj -T:build install")}
 
-  cljdoc {:doc "Test cljdoc analysis locally"
-          :depends [build]
-          :task (let [v (clojure.string/trim (:out (shell {:out :string} "clj -T:build version-str")))]
-                  (shell "clj -M:cljdoc"
-                    (format "{:project \"co.multiply/machine-latch\" :version \"%s\" :jarpath \"target/machine-latch-%s.jar\" :pompath \"target/classes/META-INF/maven/co.multiply/machine-latch/pom.xml\"}"
-                      v v)))}
+  tag          {:doc  "Create and push version tag"
+                :task (shell "clj -T:build tag")}
 
-  format:check {:doc "Check code formatting"
+  deploy       {:doc  "Tag, push, and deploy to Clojars"
+                :task (do (shell "clj -T:build tag")
+                        (shell "clj -T:build deploy"))}
+
+  cljdoc       {:doc     "Test cljdoc analysis locally"
+                :depends [build]
+                :task    (let [v (clojure.string/trim (:out (shell {:out :string} "clj -T:build version-str")))]
+                           (shell "clj -M:cljdoc"
+                             (format "{:project \"co.multiply/machine-latch\" :version \"%s\" :jarpath \"target/machine-latch-%s.jar\" :pompath \"target/classes/META-INF/maven/co.multiply/machine-latch/pom.xml\"}"
+                               v v)))}
+
+  format:check {:doc  "Check code formatting"
                 :task (shell "cljstyle check src")}
 
-  format:fix {:doc "Fix code formatting"
-              :task (shell "cljstyle fix src")}}}
+  format:fix   {:doc  "Fix code formatting"
+                :task (shell "cljstyle fix src")}}}

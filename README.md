@@ -19,7 +19,7 @@ on JDK 25+, with a fallback for older versions.
 
 ```clojure
 ;; deps.edn
-co.multiply/machine-latch {:mvn/version "0.1.12"}
+co.multiply/machine-latch {:mvn/version "0.1.13"}
 ```
 
 ## Why machine-latch?
@@ -135,6 +135,28 @@ Block with a timeout. Returns `true` if the state was reached, `false` if timed 
 (ml/await-millis latch :done 5000)              ; 5 second timeout
 (ml/await-dur latch :done (Duration/ofSeconds 5))  ; same, with Duration
 ```
+
+## ClojureScript
+
+In ClojureScript, `await` and `await-millis` return Promises instead of blocking:
+
+```cljs
+(require '[co.multiply.machine-latch :as ml])
+
+;; Returns a Promise that resolves to true when state is reached
+(-> (ml/await latch :done)
+    (.then (fn [result] (println "Done!" result))))
+
+;; With timeout - resolves to false if timed out
+(-> (ml/await-millis latch :done 5000)
+    (.then (fn [reached?]
+             (if reached?
+               (println "Reached!")
+               (println "Timed out")))))
+```
+
+**Note:** `await-dur` is not available in ClojureScript. Machine specs must be defined in `.cljc` files or as
+literal maps to be resolvable at compile time.
 
 ## Constraints
 

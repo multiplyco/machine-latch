@@ -1,17 +1,20 @@
 {:paths ["src"]
 
- :deps {co.multiply/scoped {:mvn/version "0.1.14"}}
+ :deps  {co.multiply/scoped {:mvn/version "0.1.15"}
+         #_#_org.clojure/clojurescript {:mvn/version "1.12.134"}}
 
  :aliases
- {:dev   {:extra-paths ["dev"]
-          :extra-deps  {nrepl/nrepl {:mvn/version "1.5.1"}}}
+ {:dev         {:extra-paths ["dev"]
+                :extra-deps  {nrepl/nrepl {:mvn/version "1.5.2"}}}
 
-  :test  {:extra-paths ["test"]
-          :extra-deps  {lambdaisland/kaocha {:mvn/version "1.91.1392"}}}
+  :test        {:extra-paths ["test"]
+                :extra-deps  {lambdaisland/kaocha {:mvn/version "1.91.1392"}}}
 
-  :build {:ns-default build
-          :deps       {io.github.clojure/tools.build {:mvn/version "0.10.11"}
-                       slipset/deps-deploy           {:mvn/version "0.2.2"}}}
+  :shadow-cljs {:extra-deps {thheller/shadow-cljs {:mvn/version "3.3.4"}}}
 
-  :cljdoc {:extra-deps {io.github.cljdoc/cljdoc-analyzer {:git/tag "0.10.3" :git/sha "3f37a390"}}
-           :main-opts  ["-m" "cljdoc-analyzer.cljdoc-main"]}}}
+  :build       {:ns-default build
+                :deps       {io.github.clojure/tools.build {:mvn/version "0.10.11"}
+                             slipset/deps-deploy           {:mvn/version "0.2.2"}}}
+
+  :cljdoc      {:extra-deps {io.github.cljdoc/cljdoc-analyzer {:git/tag "0.10.3" :git/sha "3f37a390"}}
+                :main-opts  ["-m" "cljdoc-analyzer.cljdoc-main"]}}}

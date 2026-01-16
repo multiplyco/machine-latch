@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.13 - 2026-01-30
+
+- Add ClojureScript version with Promise-based await semantics.
+  - `await` and `await-millis` return Promises that resolve to `true` when the target state is reached.
+  - `await-dur` is CLJ-only (throws at compile time in CLJS).
+  - Machine specs must be defined in `.cljc` files or as literal maps.
+- Bump `scoped` to 0.1.15.
+
 ## 0.1.12 - 2026-01-07
 
 - Bump `scoped` to 0.1.14
