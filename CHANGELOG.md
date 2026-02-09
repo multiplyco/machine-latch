@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.15 - 2026-02-09
+
+- Fix cljdoc analysis failure by wrapping `machine-latch-factory` macro in `#?(:clj ...)`.
+
 ## 0.1.13 - 2026-01-30
 
 - Add ClojureScript version with Promise-based await semantics.

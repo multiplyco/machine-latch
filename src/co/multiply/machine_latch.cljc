@@ -34,46 +34,47 @@
 
 ;; # Factory macro
 ;; ################################################################################
-(defmacro machine-latch-factory
-  "Returns a factory fn that creates latches for this machine.
+#?(:clj
+   (defmacro machine-latch-factory
+     "Returns a factory fn that creates latches for this machine.
 
-   Machine spec:
+      Machine spec:
 
-   ```clojure
-   {:states [:a :b :c ...]           ; ordered from initial to terminal
-    :transitions {:action {from to}  ; action with single from
-                  :action2 {from1 to1, from2 to2}}}  ; action with multiple froms
-   ```
+      ```clojure
+      {:states [:a :b :c ...]           ; ordered from initial to terminal
+       :transitions {:action {from to}  ; action with single from
+                     :action2 {from1 to1, from2 to2}}}  ; action with multiple froms
+      ```
 
-   Pre-computes `state->idx` mapping and compiles transitions to use integers.
-   Each latch instance has its own state and waiter collection."
-  [machine]
-  (let [machine (try
-                  ;; Force-load the CLJS namespace in CLJ
-                  (when-let [cljs-ns (:ns &env)]
-                    (try (require (symbol (str (:name cljs-ns))))
-                      (catch Exception _)))
-                  ;; Attempt to eval machine.
-                  (eval machine)
-                  (catch Exception e
-                    (if (:ns &env)
-                      ;; CLJS: vars must be defined in .cljc files to be resolvable
-                      (throw (IllegalArgumentException.
-                               (str "Cannot resolve machine spec in CLJS: `" machine "`. "
-                                 "Define the machine in a .cljc file, or use a literal map.")))
-                      (throw e))))]
-    (common/validate-machine! machine)
-    (let [states        (:states machine)
-          indices       (vec (range (count states)))
-          state->idx    (interleave states indices)
-          idx->state    (interleave indices states)
-          transitions   (:transitions machine)
-          transition-fn (common/compile-transition-fn transitions (zipmap states indices))]
-      `(fn make-latch# []
-         (impl/make-latch
-           (fn [i#] (case (unchecked-int i#) ~@idx->state))
-           (fn [s#] (case s# ~@state->idx))
-           ~transition-fn)))))
+      Pre-computes `state->idx` mapping and compiles transitions to use integers.
+      Each latch instance has its own state and waiter collection."
+     [machine]
+     (let [machine (try
+                     ;; Force-load the CLJS namespace in CLJ
+                     (when-let [cljs-ns (:ns &env)]
+                       (try (require (symbol (str (:name cljs-ns))))
+                         (catch Exception _)))
+                     ;; Attempt to eval machine.
+                     (eval machine)
+                     (catch Exception e
+                       (if (:ns &env)
+                         ;; CLJS: vars must be defined in .cljc files to be resolvable
+                         (throw (IllegalArgumentException.
+                                  (str "Cannot resolve machine spec in CLJS: `" machine "`. "
+                                    "Define the machine in a .cljc file, or use a literal map.")))
+                         (throw e))))]
+       (common/validate-machine! machine)
+       (let [states        (:states machine)
+             indices       (vec (range (count states)))
+             state->idx    (interleave states indices)
+             idx->state    (interleave indices states)
+             transitions   (:transitions machine)
+             transition-fn (common/compile-transition-fn transitions (zipmap states indices))]
+         `(fn make-latch# []
+            (impl/make-latch
+              (fn [i#] (case (unchecked-int i#) ~@idx->state))
+              (fn [s#] (case s# ~@state->idx))
+              ~transition-fn))))))
 
 
 ;; # Public API
