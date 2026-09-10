@@ -19,7 +19,7 @@ on JDK 25+, with a fallback for older versions.
 
 ```clojure
 ;; deps.edn
-co.multiply/machine-latch {:mvn/version "0.1.15"}
+co.multiply/machine-latch {:mvn/version "0.1.16"}
 ```
 
 ## Why machine-latch?

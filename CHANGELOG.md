@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.16 - 2026-09-10
+
+- Bump `scoped` to 0.1.17, which evaluates the default in `ask` lazily.
+
 ## 0.1.15 - 2026-02-09
 
 - Fix cljdoc analysis failure by wrapping `machine-latch-factory` macro in `#?(:clj ...)`.
