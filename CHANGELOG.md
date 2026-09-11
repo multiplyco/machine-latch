@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.17 - 2026-09-11
+
+- Bump `scoped` to 0.1.18.
+
 ## 0.1.16 - 2026-09-10
 
 - Bump `scoped` to 0.1.17, which evaluates the default in `ask` lazily.
